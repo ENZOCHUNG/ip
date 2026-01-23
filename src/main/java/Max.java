@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Max {
@@ -5,6 +7,7 @@ public class Max {
     private String seperator = "-------------------------------------------";
     private Scanner scanner = new Scanner(System.in);
     private String input;
+    private List<String> list = new ArrayList<>();
 
     public String getName() {
         return this.name;
@@ -26,13 +29,20 @@ public class Max {
         input = scanner.nextLine();
 
         while(!input.equalsIgnoreCase("bye")) {
+            if (input.equalsIgnoreCase("list")) {
+                System.out.println(this.list);
+                input = scanner.nextLine();
+            }
+            if (input.equalsIgnoreCase("bye")) {
+                exit();
+                break;
+            }
             System.out.println(seperator);
-            System.out.println(this.input);
+            System.out.println("added: " + this.input);
             System.out.println(seperator);
+            list.add(input);
             input = scanner.nextLine();
         }
-        
-        exit();
     }
 
     public static void main(String[] args) {
