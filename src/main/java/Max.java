@@ -7,7 +7,8 @@ public class Max {
     private String seperator = "-------------------------------------------";
     private Scanner scanner = new Scanner(System.in);
     private String input;
-    private List<String> list = new ArrayList<>();
+//private List<String> list = new ArrayList<>();
+    private TodoList todoList = new TodoList();
 
     public String getName() {
         return this.name;
@@ -27,21 +28,68 @@ public class Max {
     
     public void startConversation() {
         input = scanner.nextLine();
+        //String lowerInput = input.toLowerCase();
 
         while(!input.equalsIgnoreCase("bye")) {
             if (input.equalsIgnoreCase("list")) {
-                System.out.println(this.list);
+                System.out.println("Here are the tasks in your list:");
+                System.out.println(this.todoList);
                 input = scanner.nextLine();
             }
-            if (input.equalsIgnoreCase("bye")) {
+            else if (input.equalsIgnoreCase("bye")) {
                 exit();
                 break;
             }
-            System.out.println(seperator);
-            System.out.println("added: " + this.input);
-            System.out.println(seperator);
-            list.add(input);
-            input = scanner.nextLine();
+            else if (input.startsWith("mark ")) {
+                try {
+                    String num = input.substring(5).trim(); 
+                    int index = Integer.parseInt(num) - 1;
+    
+                    if (index < 0 || index >= todoList.getTaskLength()) {
+                        throw new IndexOutOfBoundsException();
+                    }
+                    todoList.markTask(index);        
+                    System.out.println(seperator);
+                    System.out.println("Nice! I've marked this task as done:");
+                    System.out.println(this.todoList.getTask(index));
+                    System.out.println(seperator);
+                    input = scanner.nextLine();
+
+                } catch (NumberFormatException e){
+                    System.out.println("Write in this format: \"mark [number]\"");
+                    input = scanner.nextLine();
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Number keyed in is out of bound. You have " + todoList.getTaskLength() + " task(s)");
+                    input = scanner.nextLine();
+                }
+            }
+            else if (input.startsWith("unmark ")) {
+                try {
+                    String num = input.substring(7).trim(); 
+                    int index = Integer.parseInt(num) - 1;
+    
+                    if (index < 0 || index >= todoList.getTaskLength()) {
+                        throw new IndexOutOfBoundsException();
+                    }
+                    todoList.unmarkTask(index);     
+                    System.out.println(seperator);
+                    System.out.println("OK, I've marked this task as not done yet:");
+                    System.out.println(this.todoList.getTask(index));
+                    System.out.println(seperator);
+                    input = scanner.nextLine();
+                } catch (NumberFormatException e){
+                    System.out.println("Write in this format: \"unmark [number]\"");
+                    input = scanner.nextLine();
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Number keyed in is out of bound. You have " + todoList.getTaskLength() + " task(s)");
+                    input = scanner.nextLine();
+                }  
+            }
+            else {
+                todoList.addTask(input);
+                System.out.println("added: " + this.input);
+                input = scanner.nextLine();
+            }
         }
     }
 
