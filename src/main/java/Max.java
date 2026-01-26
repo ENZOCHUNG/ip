@@ -85,7 +85,30 @@ public class Max {
                     input = scanner.nextLine();
                 }  
             }
+            else if (input.startsWith("delete ")) {
+                try {
+                    String num = input.substring(7).trim(); 
+                    int index = Integer.parseInt(num) - 1;
+    
+                    if (index < 0 || index >= todoList.getTaskLength()) {
+                        throw new IndexOutOfBoundsException();
+                    }
+                    System.out.println(seperator);
+                    System.out.println("Noted. I've removed this task:");
+                    System.out.println(this.todoList.getTask(index));
+                    todoList.removeTask(index);   
+                    System.out.println("Now you have " + this.todoList.getTaskLength() + " tasks in the list.");
+                    System.out.println(seperator);
+                    input = scanner.nextLine();
 
+                } catch (NumberFormatException e){
+                    System.out.println("Write in this format: \"delete [number]\"");
+                    input = scanner.nextLine();
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Number keyed in is out of bound. You have " + todoList.getTaskLength() + " task(s)");
+                    input = scanner.nextLine();
+                }
+            }
             else if (input.startsWith("todo ")) {
                 try {
                     String[] parts = input.split(" ", 2);

@@ -32,6 +32,10 @@ public class TodoList {
         return tasks.get(this.getTaskLength() - 1);
     }
 
+    public void removeTask(int idx) {
+        this.tasks.remove(idx);
+    }
+
     public void markTask(int idx) {
         tasks.get(idx).setDone();            
     }
