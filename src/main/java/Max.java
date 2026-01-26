@@ -85,9 +85,57 @@ public class Max {
                     input = scanner.nextLine();
                 }  
             }
+
+            else if (input.startsWith("todo ")) {
+                try {
+                    String[] parts = input.split(" ", 2);
+                    String description = parts[1];
+                    todoList.addTask(description);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("Write in this format: \"todo [task description]\"");
+                    input = scanner.nextLine();
+                }
+                System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() + "\n" + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
+                input = scanner.nextLine();
+            }
+
+            else if (input.startsWith("deadline ")) {
+                try {
+                    String descriptionAndDate = input.substring(9);
+                    String[] parts = descriptionAndDate.split(" /by", 2);
+                    String description = parts[0].trim();
+                    String date = parts[1].trim();
+                    todoList.addTask(description, date);
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Write in this format: \"deadline [task description] /by [time description]\"");
+                    input = scanner.nextLine();
+                }
+                System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() + "\n" + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
+                input = scanner.nextLine();
+            }
+            
+            else if (input.startsWith("event ")) {
+                try {
+                    String descriptionAndDate = input.substring(6);
+                    String[] parts = descriptionAndDate.split(" /from", 2);
+                    String description = parts[0].trim();
+                    String time = parts[1].trim();
+                    String[] parts2 = time.split(" /to");
+                    String from = parts2[0].trim();
+                    String by = parts2[1].trim();
+                    todoList.addTask(description, from, by);
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Write in this format: \"event [task description] /from [time description] /to [time description]\"");
+                    input = scanner.nextLine();
+                }
+                System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() + "\n" + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
+                input = scanner.nextLine();
+            }
             else {
-                todoList.addTask(input);
-                System.out.println("added: " + this.input);
+                System.out.println("invalid input, try adding: \n");
+                System.out.println("1. todo [description]\n");
+                System.out.println("2. deadline [description] /by [day]\n");
+                System.out.println("3. event [description] /from [day + time] /to [day + time] \n");
                 input = scanner.nextLine();
             }
         }
@@ -108,4 +156,4 @@ public class Max {
 }
 
 
-                        
+// does not add task for deadline and event logic

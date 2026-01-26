@@ -9,7 +9,15 @@ public class TodoList {
     }
 
     public void addTask(String description) {
-        tasks.add(new Task(description));
+        tasks.add(new ToDos(description));
+    }
+
+    public void addTask(String description, String by) {
+        tasks.add(new Deadlines(description, by));
+    }
+
+    public void addTask(String description, String from, String by) {
+        tasks.add(new Events(description, from, by));
     }
 
     public int getTaskLength(){
@@ -19,6 +27,11 @@ public class TodoList {
     public Task getTask(int idx) {
         return tasks.get(idx);
     }
+
+    public Task getLastTask() {
+        return tasks.get(this.getTaskLength() - 1);
+    }
+
     public void markTask(int idx) {
         tasks.get(idx).setDone();            
     }
