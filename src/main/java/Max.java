@@ -132,11 +132,16 @@ public class Max {
                 input = scanner.nextLine();
             }
             else {
-                System.out.println("invalid input, try adding: \n");
-                System.out.println("1. todo [description]\n");
-                System.out.println("2. deadline [description] /by [day]\n");
-                System.out.println("3. event [description] /from [day + time] /to [day + time] \n");
-                input = scanner.nextLine();
+                try {
+                    throw new MaxException("I'm sorry, but I don't know what that means :-(");
+                } catch (MaxException e) {
+                    System.out.println("invalid input, try adding task in this format: \n");
+                    System.out.println("1. todo [description]\n");
+                    System.out.println("2. deadline [description] /by [day]\n");
+                    System.out.println("3. event [description] /from [day + time] /to [day + time] \n");
+                } finally {
+                    input = scanner.nextLine();
+                }
             }
         }
     }
