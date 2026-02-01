@@ -4,6 +4,10 @@ import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 
 public class Max {
     private String name = "Max";
@@ -12,6 +16,7 @@ public class Max {
     private String input;
 //private List<String> list = new ArrayList<>();
     private TodoList todoList = new TodoList();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public String getName() {
         return this.name;
@@ -35,7 +40,7 @@ public class Max {
         if (folder != null && folder.isDirectory() && !file.exists()) {
             System.out.println("Folder missing. Creating: " + folder.getName());
             folder.mkdirs();
-        } 
+        }
         try (PrintWriter writer = new PrintWriter(file)) {
             writer.println(todoList);
         } catch (IOException e) {
@@ -46,7 +51,7 @@ public class Max {
     public void startConversation() {
         input = scanner.nextLine();
         //String lowerInput = input.toLowerCase();
-
+        
         while(!input.equalsIgnoreCase("bye")) {
             if (input.equalsIgnoreCase("list")) {
                 System.out.println("Here are the tasks in your list:");
@@ -139,7 +144,8 @@ public class Max {
                     System.out.println("Write in this format: \"todo [task description]\"");
                     input = scanner.nextLine();
                 }
-                System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() + "\n" + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
+                System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() + "\n" 
+                        + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
                 input = scanner.nextLine();
             }
 
@@ -149,13 +155,19 @@ public class Max {
                     String[] parts = descriptionAndDate.split(" /by", 2);
                     String description = parts[0].trim();
                     String date = parts[1].trim();
-                    todoList.addTask(description, date);
+                    System.out.println(date);
+                    LocalDate myDate = LocalDate.parse(date, formatter);
+                    todoList.addTask(description, myDate);
                     saveTxt();
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("Write in this format: \"deadline [task description] /by [time description]\"");
                     input = scanner.nextLine();
+                } catch (DateTimeParseException e) {
+                    System.out.println("Write in this format: \"deadline [task description] /by yyyy-MM-dd\"");
+                    input = scanner.nextLine();
                 }
-                System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() + "\n" + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
+                System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() 
+                        + "\n" + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
                 input = scanner.nextLine();
             }
             
@@ -167,11 +179,16 @@ public class Max {
                     String time = parts[1].trim();
                     String[] parts2 = time.split(" /to");
                     String from = parts2[0].trim();
-                    String by = parts2[1].trim();
-                    todoList.addTask(description, from, by);
+                    String to = parts2[1].trim();
+                    LocalDate fromDate = LocalDate.parse(from, formatter);
+                    LocalDate toDate = LocalDate.parse(to, formatter);
+                    todoList.addTask(description, fromDate, toDate);
                     saveTxt();
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("Write in this format: \"event [task description] /from [time description] /to [time description]\"");
+                    input = scanner.nextLine();
+                } catch (DateTimeParseException e) {
+                    System.out.println("Write in this format: \"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
                     input = scanner.nextLine();
                 }
                 System.out.println("Got it. I've added this task: \n" + todoList.getLastTask() + "\n" + "Now you have " + todoList.getTaskLength() + " tasks in the list.\n");
@@ -183,8 +200,8 @@ public class Max {
                 } catch (MaxException e) {
                     System.out.println("invalid input, try adding task in this format: \n");
                     System.out.println("1. todo [description]\n");
-                    System.out.println("2. deadline [description] /by [day]\n");
-                    System.out.println("3. event [description] /from [day + time] /to [day + time] \n");
+                    System.out.println("2. deadline [description] /by yyyy-MM-dd \n");
+                    System.out.println("3. event [description] /from yyyy-MM-dd /to yyyy-MM-dd \n");
                 } finally {
                     input = scanner.nextLine();
                 }

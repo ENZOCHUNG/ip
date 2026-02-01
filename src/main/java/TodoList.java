@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +13,12 @@ public class TodoList {
         tasks.add(new ToDos(description));
     }
 
-    public void addTask(String description, String by) {
+    public void addTask(String description, LocalDate by) {
         tasks.add(new Deadlines(description, by));
     }
 
-    public void addTask(String description, String from, String by) {
-        tasks.add(new Events(description, from, by));
+    public void addTask(String description, LocalDate from, LocalDate to) {
+        tasks.add(new Events(description, from, to));
     }
 
     public int getTaskLength(){
