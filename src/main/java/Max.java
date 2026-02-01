@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.IOException;
 
 public class Max {
     private String name = "Max";
@@ -24,6 +27,20 @@ public class Max {
     public void exit() {
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(seperator);
+    }
+
+    public void saveTxt() {
+        File file = new File("data/Max.txt" );
+        File folder = file.getParentFile();   
+        if (folder != null && folder.isDirectory() && !file.exists()) {
+            System.out.println("Folder missing. Creating: " + folder.getName());
+            folder.mkdirs();
+        } 
+        try (PrintWriter writer = new PrintWriter(file)) {
+            writer.println(todoList);
+        } catch (IOException e) {
+            System.err.println("Could not save file: " + e.getMessage());
+        }
     }
     
     public void startConversation() {
@@ -53,6 +70,7 @@ public class Max {
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println(this.todoList.getTask(index));
                     System.out.println(seperator);
+                    saveTxt();
                     input = scanner.nextLine();
 
                 } catch (NumberFormatException e){
@@ -76,6 +94,7 @@ public class Max {
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println(this.todoList.getTask(index));
                     System.out.println(seperator);
+                    saveTxt();
                     input = scanner.nextLine();
                 } catch (NumberFormatException e){
                     System.out.println("Write in this format: \"unmark [number]\"");
@@ -99,6 +118,7 @@ public class Max {
                     todoList.removeTask(index);   
                     System.out.println("Now you have " + this.todoList.getTaskLength() + " tasks in the list.");
                     System.out.println(seperator);
+                    saveTxt();
                     input = scanner.nextLine();
 
                 } catch (NumberFormatException e){
@@ -114,6 +134,7 @@ public class Max {
                     String[] parts = input.split(" ", 2);
                     String description = parts[1];
                     todoList.addTask(description);
+                    saveTxt();
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("Write in this format: \"todo [task description]\"");
                     input = scanner.nextLine();
@@ -129,6 +150,7 @@ public class Max {
                     String description = parts[0].trim();
                     String date = parts[1].trim();
                     todoList.addTask(description, date);
+                    saveTxt();
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("Write in this format: \"deadline [task description] /by [time description]\"");
                     input = scanner.nextLine();
@@ -147,6 +169,7 @@ public class Max {
                     String from = parts2[0].trim();
                     String by = parts2[1].trim();
                     todoList.addTask(description, from, by);
+                    saveTxt();
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("Write in this format: \"event [task description] /from [time description] /to [time description]\"");
                     input = scanner.nextLine();
@@ -182,6 +205,3 @@ public class Max {
         chatbot.startConversation();
     }
 }
-
-
-// does not add task for deadline and event logic
