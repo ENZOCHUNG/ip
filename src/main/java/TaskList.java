@@ -2,10 +2,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TodoList {
+public class TaskList {
     private List<Task> tasks;
 
-    public TodoList() {
+    public TaskList(ArrayList<Task> arrayList) {
+        this.tasks = arrayList;
+    }
+
+    public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
