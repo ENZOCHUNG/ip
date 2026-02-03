@@ -1,3 +1,10 @@
+package max;
+
+import max.task.Task;
+import max.task.ToDos;
+import max.task.Events;
+import max.task.Deadlines;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

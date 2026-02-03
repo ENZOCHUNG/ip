@@ -1,3 +1,5 @@
+package max.task;
+
 public class Task {
     private boolean isDone;
     private String description;

@@ -1,3 +1,10 @@
+package max;
+
+import max.task.Task;
+import max.task.ToDos;
+import max.task.Events;
+import max.task.Deadlines;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -207,8 +214,7 @@ public class Max {
         this.exit();
     }
 
-
     public static void main(String[] args) {
-        new Max("data/Max.txt").run();
+        new Max("max/data/Max.txt").run();
     }
 }
