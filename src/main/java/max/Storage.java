@@ -12,7 +12,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.io.IOException;
-
+/** 
+ * Handles the loading and saving of task data to a local file.
+ * This class is responsible for ensuring that the task list persists
+ * across different session of the chatbot.
+ */
 public class Storage {
     private String filePath;
     private ArrayList<Task> tasks;
@@ -24,11 +28,17 @@ public class Storage {
         tasks = new ArrayList<>();
         taskList = new TaskList(tasks);
     }
-
+    /**
+     * Loads tasks from the local storage file. 
+     * Creates the necessary directory and file if they do not exist.
+     * 
+     * @return A TaskList populated with tasks from the file.
+     * @exception MaxException If the file format is invalid or cannot be read.
+     */
     public TaskList load() throws MaxException {
         File file = new File(this.filePath);
         File folder = file.getParentFile();
-        //
+        
         if (folder != null && !folder.exists()) {
             folder.mkdirs();
         }
@@ -73,7 +83,12 @@ public class Storage {
         this.taskList = tempTaskList;
         return tempTaskList;
     }
-
+    /**
+     * Saved TaskList to .txt.
+     * Creates a folder and file it it does not exist.
+     * @return Nothing
+     * @exception IOException If the file could not be saved.
+     */
     public void save() {
         File file = new File(filePath);
         File folder = file.getParentFile();   

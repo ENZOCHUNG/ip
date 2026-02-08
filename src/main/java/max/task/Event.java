@@ -3,11 +3,11 @@ package max.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Events extends Task {
+public class Event extends Task {
     LocalDate from;
     LocalDate to;
 
-    public Events(String description, LocalDate from, LocalDate to) {
+    public Event(String description, LocalDate from, LocalDate to) {
         super(description);
         this.from = from;
         this.to = to;

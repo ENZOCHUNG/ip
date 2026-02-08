@@ -3,10 +3,10 @@ package max.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Deadlines extends Task {
+public class Deadline extends Task {
     LocalDate by;
 
-    public Deadlines(String description, LocalDate by) {
+    public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;
     }

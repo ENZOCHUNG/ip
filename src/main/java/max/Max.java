@@ -1,9 +1,9 @@
 package max;
 
 import max.task.Task;
-import max.task.ToDos;
-import max.task.Events;
-import max.task.Deadlines;
+import max.task.ToDo;
+import max.task.Event;
+import max.task.Deadline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,23 +34,39 @@ public class Max {
             taskList = new TaskList();
         }
     }
-
+    /**
+     * Returns the name of the chatbot.
+     *
+     * @return A string representing the chatbot's constant name.
+     */
     public String getName() {
         return this.NAME;
     }
-
+    /**
+     * Returns the greeting text of the chatbot
+     *
+     * @return A string representing the chatbot's greeting
+     */
     public void greet() {
         ui.showLine();
         System.out.println("Hello! I'm " + this.getName());
         System.out.println("What can I do for you?");
         ui.showLine();
     }
-
+    /**
+     * Returns the exit text of the chatbot
+     *
+     * @return A string representing the chatbot's farewell text.
+     */
     public void exit() {
         System.out.println("Bye. Hope to see you again soon!");
         ui.showLine();
     }
-
+    /**
+     * Starts the main execution loop of the chatbot.
+     * * Processes user commands, updates the task list, and synchronises
+     * changes to the local storage file until the exit command is received.
+     */
     public void run() {
         this.greet();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
