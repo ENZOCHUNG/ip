@@ -3,6 +3,7 @@ package max;
 import max.task.Task;
 import max.task.ToDo;
 import max.task.Event;
+import max.TaskList;
 import max.task.Deadline;
 
 import java.util.ArrayList;
@@ -214,6 +215,29 @@ public class Max {
                 ui.showMessage("Got it. I've added this task: \n" + taskList.getLastTask() + "\n" + "Now you have " 
                         + taskList.getTaskLength() + " tasks in the list.\n");
                 input = ui.readCommand();
+            }
+            else if (input.startsWith("find ")) {
+                // create a temp tasklist to store task that user is finding
+                ArrayList<Task> tempArrayList = new ArrayList<>();
+                String findDescription = input.substring(5);
+                findDescription = findDescription.toLowerCase();
+                for (int i = 0; i < taskList.getTaskLength(); i++) {
+                    String taskDescription = taskList.getTask(i).getDescription();
+                    //convert to lower case so that it is not case sensitive
+                    taskDescription = taskDescription.toLowerCase();
+                    if (taskDescription.contains(findDescription)) {
+                        tempArrayList.add(taskList.getTask(i));
+                    }
+                }
+
+                if (tempArrayList.size() == 0) {
+                    ui.showMessage("No matching task in your list");
+                } else {
+                    TaskList tempTaskList = new TaskList(tempArrayList);
+                    ui.showMessage("Here are the matching tasks in your list:");
+                    ui.showMessage(tempTaskList.toString());
+                    input = ui.readCommand();
+                }
             }
             else {
                 try {
