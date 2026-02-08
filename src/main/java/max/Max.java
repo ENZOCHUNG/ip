@@ -8,9 +8,11 @@ import max.task.Deadlines;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.IOException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -128,7 +130,6 @@ public class Max {
                     ui.showLine();
                     storage.save();
                     input = ui.readCommand();
-
                 } catch (NumberFormatException e){
                     ui.showError("Write in this format: \"delete [number]\"");
                     input = ui.readCommand();
