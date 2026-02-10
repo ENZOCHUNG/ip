@@ -19,12 +19,28 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
-public class Max {
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+//import javafx.scene.web.HTMLEditorSkin.Command;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
+import javafx.fxml.FXMLLoader;
+
+public class Max extends Application {
     private Storage storage;
     private TaskList taskList;
     private Ui ui;
     private String input;
     private final String NAME = "MAX";
+    private static final String DEFAULT_FILE_PATH = "max/data/Max.txt";
+    private String commandType;
 
     public Max(String filePath) {
         ui = new Ui();
@@ -37,14 +53,154 @@ public class Max {
             taskList = new TaskList();
         }
     }
+
+    public Max() {
+        this(DEFAULT_FILE_PATH);
+    }
+
+    @Override
+    public void start(Stage stage) {
+        try {
+            stage.setMinHeight(220);
+            stage.setMinWidth(417);
+            FXMLLoader fxmlLoader = new FXMLLoader(Max.class.getResource("/view/MainWindow.fxml"));
+            AnchorPane ap = fxmlLoader.load();
+            Scene scene = new Scene(ap);
+            stage.setScene(scene);
+            fxmlLoader.<MainWindow>getController().setDuke(this);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        String response;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
+        try {
+            if (input.equalsIgnoreCase("list")) {
+                response = "Here are the tasks in your list:\n" + taskList.toString();
+            } 
+            
+            else if (input.startsWith("mark ")) {
+                int index = Integer.parseInt(input.substring(5).trim()) - 1;
+                taskList.markTask(index);
+                storage.save();
+                response = "Nice! I've marked this task as done:\n" + taskList.getTask(index).toString();
+            } 
+
+            else if (input.startsWith("unmark ")) {
+                String num = input.substring(7).trim();
+                int index = Integer.parseInt(num) - 1;
+
+                if (index < 0 || index >= taskList.getTaskLength()) {
+                    throw new IndexOutOfBoundsException();
+                }
+                taskList.unmarkTask(index);
+                storage.save();
+                response = "Nice! I've marked this task as done:" + 
+                            "\n" + this.taskList.getTask(index).toString();
+                }
+            else if (input.startsWith("todo ")) {
+                String description = input.split(" ", 2)[1];
+                taskList.addTask(description);
+                storage.save();
+                response = "Got it. I've added this task:\n" + taskList.getLastTask() + 
+                           "\nNow you have " + taskList.getTaskLength() + " tasks in the list.";
+            }
+            
+            else if (input.startsWith("deadline ")) {
+                String[] parts = input.substring(9).split(" /by ", 2);
+                LocalDate myDate = LocalDate.parse(parts[1].trim(), formatter);
+                taskList.addTask(parts[0].trim(), myDate);
+                storage.save();
+                response = "Got it. I've added this task:\n" + taskList.getLastTask() + 
+                           "\nNow you have " + taskList.getTaskLength() + " tasks in the list.";
+            }
+            
+            else if (input.equalsIgnoreCase("bye")) {
+                response = "Bye. Hope to see you again soon!";
+            } 
+
+            else if (input.startsWith("delete ")) {
+                String num = input.substring(7).trim();
+                int index = Integer.parseInt(num) - 1;
+
+                if (index < 0 || index >= taskList.getTaskLength()) {
+                    throw new IndexOutOfBoundsException();
+                }
+                String taskDetails = this.taskList.getTask(index).toString();
+        
+                taskList.removeTask(index);
+                storage.save();
+        
+                response = "Noted. I've removed this task:\n" + taskDetails + "\n";
+                response += "Now you have " + this.taskList.getTaskLength() + " tasks in the list.";
+            }
+            else if (input.startsWith("event ")) {
+                String descriptionAndDate = input.substring(6);
+                String[] parts = descriptionAndDate.split(" /from", 2);
+                String description = parts[0].trim();
+                String time = parts[1].trim();
+                String[] parts2 = time.split(" /to");
+                String from = parts2[0].trim();
+                String to = parts2[1].trim();
+                LocalDate fromDate = LocalDate.parse(from, formatter);
+                LocalDate toDate = LocalDate.parse(to, formatter);
+                taskList.addTask(description, fromDate, toDate);
+                storage.save();
+                response = "Got it. I've added this task: \n" + taskList.getLastTask() + "\n" + "Now you have "
+                        + taskList.getTaskLength() + " tasks in the list.\n";
+            }
+            else if (input.startsWith("find ")) {
+                // create a temp tasklist to store task that user is finding
+                ArrayList<Task> tempArrayList = new ArrayList<>();
+                String findDescription = input.substring(5);
+                findDescription = findDescription.toLowerCase();
+                for (int i = 0; i < taskList.getTaskLength(); i++) {
+                    String taskDescription = taskList.getTask(i).getDescription();
+                    // convert to lower case so that it is not case sensitive
+                    taskDescription = taskDescription.toLowerCase();
+                    if (taskDescription.contains(findDescription)) {
+                        tempArrayList.add(taskList.getTask(i));
+                    }
+                }
+
+                if (tempArrayList.size() == 0) {
+                    response = "No matching task in your list";
+                } else {
+                    TaskList tempTaskList = new TaskList(tempArrayList);
+                    response = "Here are the matching tasks in your list:\n" + tempTaskList.toString();
+                }
+            }
+            else {
+                response = "I'm sorry, but I don't know what that means :-(";
+            }
+    
+        } catch (Exception e) {
+            response = "Error: " + e.getMessage();
+        }
+        
+        return response;
+    }
+
+    public String getCommandType() {
+        return commandType;
+    }
+
     /**
      * Returns the name of the chatbot.
-     *
+     * 
      * @return A string representing the chatbot's constant name.
      */
     public String getName() {
         return this.NAME;
     }
+
     /**
      * Returns the greeting text of the chatbot
      *
@@ -56,6 +212,7 @@ public class Max {
         System.out.println("What can I do for you?");
         ui.showLine();
     }
+
     /**
      * Returns the exit text of the chatbot
      *
@@ -65,6 +222,7 @@ public class Max {
         System.out.println("Bye. Hope to see you again soon!");
         ui.showLine();
     }
+
     /**
      * Starts the main execution loop of the chatbot.
      * * Processes user commands, updates the task list, and synchronises
@@ -74,68 +232,64 @@ public class Max {
         this.greet();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         input = ui.readCommand();
-        
-        while(!input.equalsIgnoreCase("bye")) {
+
+        while (!input.equalsIgnoreCase("bye")) {
             if (input.equalsIgnoreCase("list")) {
                 ui.showMessage("Here are the tasks in your list:");
                 ui.showMessage(this.taskList.toString());
                 input = ui.readCommand();
-            }
-            else if (input.equalsIgnoreCase("bye")) {
+            } else if (input.equalsIgnoreCase("bye")) {
                 exit();
                 break;
-            }
-            else if (input.startsWith("mark ")) {
+            } else if (input.startsWith("mark ")) {
                 try {
-                    String num = input.substring(5).trim(); 
+                    String num = input.substring(5).trim();
                     int index = Integer.parseInt(num) - 1;
-    
+
                     if (index < 0 || index >= taskList.getTaskLength()) {
                         throw new IndexOutOfBoundsException();
                     }
-                    taskList.markTask(index);        
+                    taskList.markTask(index);
                     ui.showLine();
                     ui.showMessage("Nice! I've marked this task as done:");
                     ui.showMessage((this.taskList.getTask(index)).toString());
                     ui.showLine();
                     storage.save();
                     input = ui.readCommand();
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     System.out.println("Write in this format: \"mark [number]\"");
                     input = ui.readCommand();
                 } catch (IndexOutOfBoundsException e) {
                     ui.showError("Number keyed in is out of bound. You have " + taskList.getTaskLength() + " task(s)");
                     input = ui.readCommand();
                 }
-            }
-            else if (input.startsWith("unmark ")) {
+            } else if (input.startsWith("unmark ")) {
                 try {
-                    String num = input.substring(7).trim(); 
+                    String num = input.substring(7).trim();
                     int index = Integer.parseInt(num) - 1;
-    
+
                     if (index < 0 || index >= taskList.getTaskLength()) {
                         throw new IndexOutOfBoundsException();
                     }
-                    taskList.unmarkTask(index);     
+                    taskList.unmarkTask(index);
                     ui.showLine();
                     ui.showMessage("OK, I've marked this task as not done yet:");
                     ui.showMessage((this.taskList.getTask(index)).toString());
                     ui.showLine();
                     storage.save();
                     input = ui.readCommand();
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     ui.showError("Write in this format: \"unmark [number]\"");
                     input = ui.readCommand();
                 } catch (IndexOutOfBoundsException e) {
                     ui.showError("Number keyed in is out of bound. You have " + taskList.getTaskLength() + " task(s)");
                     input = ui.readCommand();
-                }  
-            }
-            else if (input.startsWith("delete ")) {
+                }
+            } else if (input.startsWith("delete ")) {
                 try {
-                    String num = input.substring(7).trim(); 
+                    String num = input.substring(7).trim();
                     int index = Integer.parseInt(num) - 1;
-    
+
                     if (index < 0 || index >= taskList.getTaskLength()) {
                         throw new IndexOutOfBoundsException();
                     }
@@ -147,15 +301,14 @@ public class Max {
                     ui.showLine();
                     storage.save();
                     input = ui.readCommand();
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     ui.showError("Write in this format: \"delete [number]\"");
                     input = ui.readCommand();
                 } catch (IndexOutOfBoundsException e) {
                     ui.showError("Number keyed in is out of bound. You have " + taskList.getTaskLength() + " task(s)");
                     input = ui.readCommand();
                 }
-            }
-            else if (input.startsWith("todo ")) {
+            } else if (input.startsWith("todo ")) {
                 try {
                     String[] parts = input.split(" ", 2);
                     String description = parts[1];
@@ -165,7 +318,7 @@ public class Max {
                     ui.showError("Write in this format: \"todo [task description]\"");
                     input = ui.readCommand();
                 }
-                ui.showError("Got it. I've added this task: \n" + taskList.getLastTask() + "\n" 
+                ui.showError("Got it. I've added this task: \n" + taskList.getLastTask() + "\n"
                         + "Now you have " + taskList.getTaskLength() + " tasks in the list.\n");
                 input = ui.readCommand();
             }
@@ -187,11 +340,11 @@ public class Max {
                     ui.showError("Write in this format: \"deadline [task description] /by yyyy-MM-dd\"");
                     input = ui.readCommand();
                 }
-                ui.showMessage("Got it. I've added this task: \n" + taskList.getLastTask() 
+                ui.showMessage("Got it. I've added this task: \n" + taskList.getLastTask()
                         + "\n" + "Now you have " + taskList.getTaskLength() + " tasks in the list.\n");
                 input = ui.readCommand();
             }
-            
+
             else if (input.startsWith("event ")) {
                 try {
                     String descriptionAndDate = input.substring(6);
@@ -206,24 +359,25 @@ public class Max {
                     taskList.addTask(description, fromDate, toDate);
                     storage.save();
                 } catch (IndexOutOfBoundsException e) {
-                    ui.showMessage("Write in this format: \"event [task description] /from [time description] /to [time description]\"");
+                    ui.showMessage(
+                            "Write in this format: \"event [task description] /from [time description] /to [time description]\"");
                     input = ui.readCommand();
                 } catch (DateTimeParseException e) {
-                    ui.showMessage("Write in this format: \"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
+                    ui.showMessage(
+                            "Write in this format: \"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
                     input = ui.readCommand();
                 }
-                ui.showMessage("Got it. I've added this task: \n" + taskList.getLastTask() + "\n" + "Now you have " 
+                ui.showMessage("Got it. I've added this task: \n" + taskList.getLastTask() + "\n" + "Now you have "
                         + taskList.getTaskLength() + " tasks in the list.\n");
                 input = ui.readCommand();
-            }
-            else if (input.startsWith("find ")) {
+            } else if (input.startsWith("find ")) {
                 // create a temp tasklist to store task that user is finding
                 ArrayList<Task> tempArrayList = new ArrayList<>();
                 String findDescription = input.substring(5);
                 findDescription = findDescription.toLowerCase();
                 for (int i = 0; i < taskList.getTaskLength(); i++) {
                     String taskDescription = taskList.getTask(i).getDescription();
-                    //convert to lower case so that it is not case sensitive
+                    // convert to lower case so that it is not case sensitive
                     taskDescription = taskDescription.toLowerCase();
                     if (taskDescription.contains(findDescription)) {
                         tempArrayList.add(taskList.getTask(i));
@@ -238,8 +392,7 @@ public class Max {
                     ui.showMessage(tempTaskList.toString());
                     input = ui.readCommand();
                 }
-            }
-            else {
+            } else {
                 try {
                     throw new MaxException("I'm sorry, but I don't know what that means :-(");
                 } catch (MaxException e) {
@@ -257,5 +410,6 @@ public class Max {
 
     public static void main(String[] args) {
         new Max("max/data/Max.txt").run();
+
     }
 }
