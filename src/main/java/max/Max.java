@@ -100,6 +100,7 @@ public class Max extends Application {
                 if (index < 0 || index >= taskList.getTaskLength()) {
                     throw new IndexOutOfBoundsException();
                 }
+                
                 taskList.unmarkTask(index);
                 storage.save();
                 response = "Nice! I've marked this task as done:" + 

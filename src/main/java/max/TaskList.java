@@ -24,6 +24,12 @@ public class TaskList {
         this.tasks = new ArrayList<>();
     }
     /**
+     * Assert method to check if input causes out of bound error
+     */
+    private void assertValidIndex(int idx) {
+        assert idx >= 0 && idx < tasks.size() : "Invalid task index: " + idx;
+    }    
+    /**
      * Creates a ToDo task and append to TaskList
      * @param description The description of the todo task
      */
@@ -58,6 +64,7 @@ public class TaskList {
      * @return Task
      */
     public Task getTask(int idx) {
+        assertValidIndex(idx);
         return tasks.get(idx);
     }
     /**
@@ -65,24 +72,28 @@ public class TaskList {
      * @return Task
      */
     public Task getLastTask() {
+        assert tasks.size() > 0 : "Task List should have at least one task";
         return tasks.get(this.getTaskLength() - 1);
     }
     /**
      * Remove task via indexing
      */
     public void removeTask(int idx) {
+        assertValidIndex(idx);
         this.tasks.remove(idx);
     }
     /**
      * Set task as done via indexing
      */
     public void markTask(int idx) {
+        assertValidIndex(idx);
         tasks.get(idx).setDone();            
     }
     /**
      * Set task as undone via indexing
      */
     public void unmarkTask(int idx) {
+        assertValidIndex(idx);
         tasks.get(idx).setUndone();
     }
 
