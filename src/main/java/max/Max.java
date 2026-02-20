@@ -100,6 +100,7 @@ public class Max extends Application {
                 if (index < 0 || index >= taskList.getTaskLength()) {
                     throw new IndexOutOfBoundsException();
                 }
+                
                 taskList.unmarkTask(index);
                 storage.save();
                 response = "Nice! I've marked this task as done:" + 
@@ -108,7 +109,7 @@ public class Max extends Application {
             else if (input.startsWith("todo ")) {
                 String description = input.split(" ", 2)[1];
                 taskList.addTask(description);
-                storage.save();
+                    storage.save();
                 response = "Got it. I've added this task:\n" + taskList.getLastTask() + 
                            "\nNow you have " + taskList.getTaskLength() + " tasks in the list.";
             }
