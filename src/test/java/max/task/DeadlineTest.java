@@ -15,7 +15,7 @@ public class DeadlineTest {
     public void deadlineToStringTest() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate myDate = LocalDate.parse("2019-10-15", formatter);
-        Deadlines deadline = new Deadlines("2103T quiz", myDate);
+        Deadline deadline = new Deadline("2103T quiz", myDate);
         assertEquals(deadline.toString(), "[D][ ] 2103T quiz (by: Oct 15 2019)");
     }
 }
