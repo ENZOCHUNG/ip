@@ -52,6 +52,7 @@ application {
 shadowJar {
     archiveBaseName = "max"
     archiveClassifier = null
+    archiveFileName = 'max.jar'
 }
 
 run{
