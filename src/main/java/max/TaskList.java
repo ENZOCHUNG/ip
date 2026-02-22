@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * This class stores the different Task as a list
  * Allows for adding, removing and accessing task in the list
@@ -28,7 +29,7 @@ public class TaskList {
      */
     private void assertValidIndex(int idx) {
         assert idx >= 0 && idx < tasks.size() : "Invalid task index: " + idx;
-    }    
+    }
     /**
      * Creates a ToDo task and append to TaskList
      * @param description The description of the todo task
@@ -87,7 +88,7 @@ public class TaskList {
      */
     public void markTask(int idx) {
         assertValidIndex(idx);
-        tasks.get(idx).setDone();            
+        tasks.get(idx).setDone();
     }
     /**
      * Set task as undone via indexing
@@ -107,7 +108,7 @@ public class TaskList {
             sb.append(i+1)
               .append(".")
               .append(tasks.get(i));
-            
+
             if (i < tasks.size() - 1) {
                 sb.append("\n");
             }

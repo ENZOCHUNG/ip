@@ -18,17 +18,8 @@ public class Ui {
     /**
      * Prints the logo of the chatbot
      */
-    public void showWelcome() {
-        String logo = " __  __          __   __\n"
-                + "|  \\/  |   /\\    \\ \\ / /\n" 
-                + "| \\  / |  /  \\    \\ V / \n" 
-                + "| |\\/| | / /\\ \\    > <  \n" 
-                + "| |  | |/ ____ \\  / . \\ \n"
-                + "|_|  |_/_/    \\_\\/_/ \\_\\\n";
-        System.out.println("Hello from\n" + logo);
-        System.out.println(SEPARATOR);
-        System.out.println("Hello! I'm Max\nWhat can I do for you?");
-        System.out.println(SEPARATOR);
+    public String getWelcomeMessage() {
+        return "Hello! I'm Max.\nWhat can I do for you?";
     }
     /**
      * Creates the input by the user
@@ -37,26 +28,26 @@ public class Ui {
         return scanner.nextLine();
     }
     /**
-     * This method prints a single line 
+     * This method prints a single line
      */
     public void showLine() {
         System.out.println(SEPARATOR);
     }
     /**
-     * This method prints error message 
+     * This method prints error message
      * @param message Prints this error message
      */
     public void showError(String message) {
         System.out.println("Error: " + message);
     }
     /**
-     * This method prints loading error message 
+     * This method prints loading error message
      */
     public void showLoadingError() {
         System.out.println("Failed to load tasks from file. Creating a new list.");
     }
     /**
-     * This method prints a message 
+     * This method prints a message
      * @param message Prints this message
      */
     public void showMessage(String message) {

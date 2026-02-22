@@ -2,7 +2,9 @@ package max.command;
 
 import max.Storage;
 import max.TaskList;
-
+/**
+ * Displays the tasklist when user keys in list
+ */
 public class ListCommand implements Command {
     @Override
     public String execute(TaskList tasks, Storage storage) {
