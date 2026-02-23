@@ -149,7 +149,7 @@ public class Parser {
             return new DeadlineCommand(description, myDate);
         } catch (DateTimeParseException e) {
             throw new MaxException("Invalid date. Write in this format:"
-                    + "\"deadline [task description] /by [time description]\"");
+                    + "\"deadline [task description] /by [yyyy-MM-dd]\"");
         }
     }
 
@@ -172,7 +172,7 @@ public class Parser {
             return new EventCommand(description, fromDate, toDate);
         } catch (DateTimeParseException e) {
             throw new MaxException("Invalid date. Write in this format:"
-                    + "\"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
+                    + "\"event [task description] /from [yyyy-MM-dd] /to [yyyy-MM-dd]\"");
         }
     }
 

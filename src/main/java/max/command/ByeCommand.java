@@ -15,6 +15,7 @@ public class ByeCommand implements Command {
      */
     @Override
     public String execute(TaskList tasks, Storage storage) {
+        storage.save();
         return "Bye. Hope to see you again soon!";
     }
 
