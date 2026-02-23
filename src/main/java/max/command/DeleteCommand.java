@@ -16,6 +16,7 @@ public class DeleteCommand implements Command {
     public DeleteCommand(int idx) {
         this.idx = idx;
     }
+
     /**
      * Executes the command to remove a task from the task list and saves the change to storage.
      *
