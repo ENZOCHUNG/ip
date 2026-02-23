@@ -1,17 +1,13 @@
 package max.command;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
-
 import max.Storage;
 import max.TaskList;
+
 /**
  * Updates the storage and tasklist when user keys in delete
  */
 public class DeleteCommand implements Command {
-    int idx;
+    private int idx;
 
     public DeleteCommand(int idx) {
         this.idx = idx;
@@ -31,6 +27,10 @@ public class DeleteCommand implements Command {
         storage.save();
         return "Noted. I've removed this task:\n" + taskDetails + "\n"
                         + "Now you have " + tasks.getTaskLength() + " tasks in the list.";
+    }
+
+    public int getIdx() {
+        return idx;
     }
 
     @Override

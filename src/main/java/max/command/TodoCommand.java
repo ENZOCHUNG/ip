@@ -17,7 +17,7 @@ public class TodoCommand implements Command {
         this.description = description;
     }
     /**
-     * Executes the command to add a new task to the task list and saves the change to storage.
+     * Executes the command to add a new task to the task list and saves the change to the storage.
      *
      * @param tasks The list of tasks where the new task will be added.
      * @param storage The storage handler used to persist the updated task list to the hard disk.

@@ -68,6 +68,7 @@ public class TaskList {
         assertValidIndex(idx);
         return tasks.get(idx);
     }
+
     /**
      * Returns the last task
      * @return Task
@@ -76,6 +77,7 @@ public class TaskList {
         assert tasks.size() > 0 : "Task List should have at least one task";
         return tasks.get(this.getTaskLength() - 1);
     }
+
     /**
      * Remove task via indexing
      */
@@ -83,6 +85,7 @@ public class TaskList {
         assertValidIndex(idx);
         this.tasks.remove(idx);
     }
+
     /**
      * Set task as done via indexing
      */
