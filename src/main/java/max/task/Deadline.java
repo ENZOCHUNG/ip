@@ -7,7 +7,8 @@ import java.time.format.DateTimeFormatter;
  * Represents a deadline task with a due date.
  */
 public class Deadline extends Task {
-    private LocalDate by;
+
+    private final LocalDate by;
 
     /**
      * Creates a Deadline task with a description and due date.
@@ -30,7 +31,15 @@ public class Deadline extends Task {
     }
 
     @Override
+    public LocalDate getSortDate() {
+        return by;
+    }
+
+    @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
+        return "[D]" + super.toString()
+                + " (by: "
+                + by.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
+                + ")";
     }
 }

@@ -3,6 +3,7 @@ package max;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
 
 import max.task.Deadline;
 import max.task.Event;
@@ -67,6 +68,7 @@ public class TaskList {
         assertValidIndex(idx);
         return tasks.get(idx);
     }
+
     /**
      * Returns the last task
      * @return Task
@@ -75,6 +77,7 @@ public class TaskList {
         assert tasks.size() > 0 : "Task List should have at least one task";
         return tasks.get(this.getTaskLength() - 1);
     }
+
     /**
      * Remove task via indexing
      */
@@ -82,6 +85,7 @@ public class TaskList {
         assertValidIndex(idx);
         this.tasks.remove(idx);
     }
+
     /**
      * Set task as done via indexing
      */
@@ -95,7 +99,35 @@ public class TaskList {
         assertValidIndex(idx);
         tasks.get(idx).setUndone();
     }
+    /**
+     * Sorts the tasks in chronological order based on their associated dates.
+     *
+     * Tasks that contain a date (e.g., Deadline, Event)
+     * are sorted in ascending order using their {getSortDate()} value.
+     * Tasks without a date (e.g., {ToDo}) are placed at the end of the list.
+     *
+     * If both tasks being compared do not have dates, their relative
+     * order remains unchanged.
+     */
+    public void sortTasksChronologically() {
+        tasks.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task t1, Task t2) {
+                LocalDate d1 = t1.getSortDate();
+                LocalDate d2 = t2.getSortDate();
 
+                if (d1 == null && d2 == null) {
+                    return 0;
+                } else if (d1 == null) {
+                    return 1; // Todos go last
+                } else if (d2 == null) {
+                    return -1;
+                } else {
+                    return d1.compareTo(d2);
+                }
+            }
+        });
+    }
     @Override
     public String toString() {
         if (tasks.isEmpty()) {

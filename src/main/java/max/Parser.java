@@ -14,6 +14,7 @@ import max.command.ListCommand;
 import max.command.MarkCommand;
 import max.command.TodoCommand;
 import max.command.UnmarkCommand;
+import max.command.SortCommand;
 
 /**
  * Deciphers user input and translates it into specific Command objects.
@@ -66,6 +67,9 @@ public class Parser {
 
         case "find":
             return parseFind(arguments);
+
+        case "sort":
+            return new SortCommand();
 
         default:
             throw new MaxException("I'm sorry, but I don't know what that means :-(");

@@ -1,5 +1,4 @@
-1.[T][X] wfnaejgne
-2.[T][ ] wfajnajg
-3.[T][ ] jfbajf
-4.[T][ ] wfbeajgbea
-5.[T][ ] wanjwfn
+1.[E][ ] Conference (from: Feb 20 2026 to: Feb 20 2026)
+2.[D][ ] Pay rent (by: Feb 25 2026)
+3.[D][ ] Submit assignment (by: Mar 5 2026)
+4.[T][ ] Read book
