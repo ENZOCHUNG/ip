@@ -1,15 +1,8 @@
 package max;
 
-import max.task.Task;
-import max.task.ToDo;
-import max.task.Event;
-import max.task.Deadline;
-
 import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * This class stores the different Task as a list
  * Allows for adding, removing and accessing task in the list
@@ -57,7 +50,7 @@ public class TaskList {
     /**
      * Returns the length of the task
      */
-    public int getTaskLength(){
+    public int getTaskLength() {
         return tasks.size();
     }
     /**
@@ -87,7 +80,6 @@ public class TaskList {
      * Set task as done via indexing
      */
     public void markTask(int idx) {
-        assertValidIndex(idx);
         tasks.get(idx).setDone();
     }
     /**
