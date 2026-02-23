@@ -17,7 +17,7 @@ import java.time.temporal.ChronoUnit;
 
 import java.io.IOException;
 
-/** 
+/**
  * Handles the loading and saving of task data to a local file.
  * This class is responsible for ensuring that the task list persists
  * across different session of the chatbot.
@@ -34,24 +34,24 @@ public class Storage {
         taskList = new TaskList(tasks);
     }
     /**
-     * Loads tasks from the local storage file. 
+     * Loads tasks from the local storage file.
      * Creates the necessary directory and file if they do not exist.
-     * 
+     *
      * @return A TaskList populated with tasks from the file.
      * @exception MaxException If the file format is invalid or cannot be read.
      */
     public TaskList load() throws MaxException {
         File file = new File(this.filePath);
         File folder = file.getParentFile();
-        
+
         if (folder != null && !folder.exists()) {
             folder.mkdirs();
         }
-    
+
         if (!file.exists()) {
             return new TaskList();
         }
-        //
+
         ArrayList<Task> loadedTasks = new ArrayList<>();
         TaskList tempTaskList = new TaskList(loadedTasks);
 
@@ -69,7 +69,7 @@ public class Storage {
                     String by = line.substring(line.indexOf("(by:") + 5, line.lastIndexOf(")"));
                     LocalDate byDate = LocalDate.parse(by, inputFormatter);
                     tempTaskList.addTask(description, byDate);
-                } 
+                }
                 else if (line.contains("[E]")) {
                     String description = line.substring(line.indexOf("]") + 4, line.indexOf("(from:")).trim();
                     String from = line.substring(line.indexOf("from:") + 6, line.indexOf("to:")).trim();
@@ -88,7 +88,7 @@ public class Storage {
         this.taskList = tempTaskList;
         return tempTaskList;
     }
-    
+
     /**
      * Saved TaskList to .txt.
      * Creates a folder and file it it does not exist.
@@ -97,7 +97,7 @@ public class Storage {
      */
     public void save() {
         File file = new File(filePath);
-        File folder = file.getParentFile();   
+        File folder = file.getParentFile();
         if (folder != null && folder.isDirectory() && !file.exists()) {
             System.out.println("Folder missing. Creating: " + folder.getName());
             folder.mkdirs();
