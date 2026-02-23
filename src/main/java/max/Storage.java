@@ -1,21 +1,16 @@
 package max;
 
-import max.task.Task;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.IOException;
-
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-
-import java.io.IOException;
+import max.task.Task;
 
 /**
  * Handles the loading and saving of task data to a local file.
@@ -27,8 +22,11 @@ public class Storage {
     private ArrayList<Task> tasks;
     private TaskList taskList;
     private DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
-
-    public Storage (String filePath) {
+    /**
+     * Initialises a Storage object that handles loading and saving tasks to a file.
+     * @param filePath The path of the file where task data is stored.
+     */
+    public Storage(String filePath) {
         this.filePath = filePath;
         tasks = new ArrayList<>();
         taskList = new TaskList(tasks);
@@ -58,19 +56,18 @@ public class Storage {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                if (line.isEmpty()) continue;
-
+                if (line.isEmpty()) {
+                    continue;
+                }
                 if (line.contains("[T]")) {
                     String description = line.substring(line.indexOf("]") + 5).trim();
                     tempTaskList.addTask(description);
-                }
-                else if (line.contains("[D]")) {
+                } else if (line.contains("[D]")) {
                     String description = line.substring(line.indexOf("]") + 5, line.indexOf("(by:")).trim();
                     String by = line.substring(line.indexOf("(by:") + 5, line.lastIndexOf(")"));
                     LocalDate byDate = LocalDate.parse(by, inputFormatter);
                     tempTaskList.addTask(description, byDate);
-                }
-                else if (line.contains("[E]")) {
+                } else if (line.contains("[E]")) {
                     String description = line.substring(line.indexOf("]") + 4, line.indexOf("(from:")).trim();
                     String from = line.substring(line.indexOf("from:") + 6, line.indexOf("to:")).trim();
                     String to = line.substring(line.indexOf("to:") + 4, line.indexOf(")")).trim();
@@ -92,7 +89,6 @@ public class Storage {
     /**
      * Saved TaskList to .txt.
      * Creates a folder and file it it does not exist.
-     * @return Nothing
      * @exception IOException If the file could not be saved.
      */
     public void save() {

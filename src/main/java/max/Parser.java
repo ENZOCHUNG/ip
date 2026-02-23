@@ -6,14 +6,14 @@ import java.time.format.DateTimeParseException;
 
 import max.command.ByeCommand;
 import max.command.Command;
+import max.command.DeadlineCommand;
+import max.command.DeleteCommand;
+import max.command.EventCommand;
+import max.command.FindCommand;
 import max.command.ListCommand;
 import max.command.MarkCommand;
-import max.command.UnmarkCommand;
-import max.command.EventCommand;
 import max.command.TodoCommand;
-import max.command.DeleteCommand;
-import max.command.DeadlineCommand;
-import max.command.FindCommand;
+import max.command.UnmarkCommand;
 
 /**
  * Deciphers user input and translates it into specific Command objects.
@@ -74,7 +74,7 @@ public class Parser {
 
     /**
      * Parses arguments for a mark command.
-     * * @param arguments The task index provided by the user.
+     * @param arguments The task index provided by the user.
      * @return A MarkCommand for the specified task.
      * @throws MaxException If the index is not a valid integer.
      */
@@ -89,7 +89,7 @@ public class Parser {
 
     /**
      * Parses arguments for an unmark command.
-     * * @param arguments The task index provided by the user.
+     * @param arguments The task index provided by the user.
      * @return An UnmarkCommand for the specified task.
      * @throws MaxException If the index is not a valid integer.
      */
@@ -104,7 +104,7 @@ public class Parser {
 
     /**
      * Parses arguments for a delete command.
-     * * @param arguments The task index provided by the user.
+     * @param arguments The task index provided by the user.
      * @return A DeleteCommand for the specified task.
      * @throws MaxException If the index is not a valid integer.
      */
@@ -119,7 +119,7 @@ public class Parser {
 
     /**
      * Validates and creates a TodoCommand.
-     * * @param arguments The description of the todo task.
+     * @param arguments The description of the todo task.
      * @return A TodoCommand with the given description.
      * @throws MaxException If the description is empty.
      */
@@ -132,7 +132,7 @@ public class Parser {
 
     /**
      * Parses the description and date for a deadline task.
-     * * @param arguments Input containing description and "/by" date.
+     * @param arguments Input containing description and "/by" date.
      * @return A DeadlineCommand.
      * @throws MaxException If the date format is invalid or "/by" is missing.
      */
@@ -144,13 +144,14 @@ public class Parser {
             LocalDate myDate = LocalDate.parse(date, Parser.formatter);
             return new DeadlineCommand(description, myDate);
         } catch (DateTimeParseException e) {
-            throw new MaxException("Invalid date. Write in this format: \"deadline [task description] /by [time description]\"");
+            throw new MaxException("Invalid date. Write in this format:"
+                    + "\"deadline [task description] /by [time description]\"");
         }
     }
 
     /**
      * Parses the description and date range for an event task.
-     * * @param arguments Input containing description, "/from" date, and "/to" date.
+     * @param arguments Input containing description, "/from" date, and "/to" date.
      * @return An EventCommand.
      * @throws MaxException If dates are invalid or delimiters are missing.
      */
@@ -166,13 +167,14 @@ public class Parser {
             LocalDate toDate = LocalDate.parse(to, Parser.formatter);
             return new EventCommand(description, fromDate, toDate);
         } catch (DateTimeParseException e) {
-            throw new MaxException("Invalid date. Write in this format: \"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
+            throw new MaxException("Invalid date. Write in this format:"
+                    + "\"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
         }
     }
 
     /**
      * Parses a search query for the find command.
-     * * @param arguments The keyword to search for.
+     * @param arguments The keyword to search for.
      * @return A FindCommand with the search string.
      */
     private static Command parseFind(String arguments) throws MaxException {
@@ -180,7 +182,8 @@ public class Parser {
             String str = arguments;
             return new FindCommand(str);
         } catch (NumberFormatException e) {
-            throw new MaxException("Write in this format: \"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
+            throw new MaxException("Write in this format:"
+                    + "\"event [task description] /from yyyy-MM-dd /to yyyy-MM-dd\"");
         }
     }
 }

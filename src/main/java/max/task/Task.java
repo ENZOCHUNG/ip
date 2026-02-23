@@ -1,9 +1,17 @@
 package max.task;
 
+/**
+ * Represents a generic task with a description and completion status.
+ */
 public class Task {
     private boolean isDone;
     private String description;
 
+    /**
+     * Creates a task with the given description.
+     *
+     * @param description The description of the task.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;

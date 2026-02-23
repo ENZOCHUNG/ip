@@ -1,5 +1,6 @@
 package max;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.application.Platform;
+
 /**
  * Controller for the main GUI.
  */
@@ -27,6 +28,9 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/gojo.jpeg"));
     private Image maxImage = new Image(this.getClass().getResourceAsStream("/images/jogo.jpeg"));
 
+    /**
+     * Initializes the GUI components and displays the welcome message.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());

@@ -3,6 +3,12 @@ package max;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import max.task.Deadline;
+import max.task.Event;
+import max.task.Task;
+import max.task.ToDo;
+
 /**
  * This class stores the different Task as a list
  * Allows for adding, removing and accessing task in the list
@@ -97,9 +103,9 @@ public class TaskList {
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i+1)
-              .append(".")
-              .append(tasks.get(i));
+            sb.append(i + 1)
+                .append(".")
+                .append(tasks.get(i));
 
             if (i < tasks.size() - 1) {
                 sb.append("\n");
