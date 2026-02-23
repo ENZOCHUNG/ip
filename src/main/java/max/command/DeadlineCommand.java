@@ -1,9 +1,6 @@
 package max.command;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 
 import max.Storage;
 import max.TaskList;
@@ -11,12 +8,17 @@ import max.TaskList;
  * Updates the storage and tasklist when user keys in deadline
  */
 public class DeadlineCommand implements Command {
-    String description;
-    LocalDate date;
-
-    public DeadlineCommand(String description, LocalDate date) {
+    private String description;
+    private LocalDate deadline;
+    /**
+     * Creates a DeadlineCommand with a description and due date.
+     *
+     * @param description Description of the task.
+     * @param deadline Due date of the task.
+     */
+    public DeadlineCommand(String description, LocalDate deadline) {
         this.description = description;
-        this.date = date;
+        this.deadline = deadline;
     }
     /**
      * Executes the command to add a new task to the task list and saves the change to storage.
@@ -27,12 +29,19 @@ public class DeadlineCommand implements Command {
      */
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        tasks.addTask(description, date);
+        tasks.addTask(description, deadline);
         storage.save();
-        return "Got it. I've added this task:\n" + tasks.getLastTask() +
-                           "\nNow you have " + tasks.getTaskLength() + " tasks in the list.";
+        return "Got it. I've added this task:\n" + tasks.getLastTask()
+                + "\nNow you have " + tasks.getTaskLength() + " tasks in the list.";
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
     @Override
     public boolean isExit() {
         return false;

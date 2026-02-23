@@ -1,11 +1,11 @@
 package max.command;
 
-import max.Storage;
-import max.TaskList;
-
 import java.util.ArrayList;
 
+import max.Storage;
+import max.TaskList;
 import max.task.Task;
+
 /**
  * Searches for identical keywords from tasklist when user keys in find
  */

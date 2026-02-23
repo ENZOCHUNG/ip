@@ -2,13 +2,17 @@ package max.command;
 
 import max.Storage;
 import max.TaskList;
+
 /**
- * Displays the tasklist when user keys in list
+ * Sorts tasks chronologically.
  */
-public class ListCommand implements Command {
+public class SortCommand implements Command {
+
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        return "Here are the tasks in your list:\n" + tasks;
+        tasks.sortTasksChronologically();
+        storage.save();
+        return "Tasks have been sorted chronologically.";
     }
 
     @Override

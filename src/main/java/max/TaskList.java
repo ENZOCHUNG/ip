@@ -1,14 +1,14 @@
 package max;
 
-import max.task.Task;
-import max.task.ToDo;
-import max.task.Event;
-import max.task.Deadline;
-
 import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
+
+import max.task.Deadline;
+import max.task.Event;
+import max.task.Task;
+import max.task.ToDo;
 
 /**
  * This class stores the different Task as a list
@@ -57,7 +57,7 @@ public class TaskList {
     /**
      * Returns the length of the task
      */
-    public int getTaskLength(){
+    public int getTaskLength() {
         return tasks.size();
     }
     /**
@@ -90,7 +90,6 @@ public class TaskList {
      * Set task as done via indexing
      */
     public void markTask(int idx) {
-        assertValidIndex(idx);
         tasks.get(idx).setDone();
     }
     /**
@@ -100,7 +99,35 @@ public class TaskList {
         assertValidIndex(idx);
         tasks.get(idx).setUndone();
     }
+    /**
+     * Sorts the tasks in chronological order based on their associated dates.
+     *
+     * Tasks that contain a date (e.g., Deadline, Event)
+     * are sorted in ascending order using their {getSortDate()} value.
+     * Tasks without a date (e.g., {ToDo}) are placed at the end of the list.
+     *
+     * If both tasks being compared do not have dates, their relative
+     * order remains unchanged.
+     */
+    public void sortTasksChronologically() {
+        tasks.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task t1, Task t2) {
+                LocalDate d1 = t1.getSortDate();
+                LocalDate d2 = t2.getSortDate();
 
+                if (d1 == null && d2 == null) {
+                    return 0;
+                } else if (d1 == null) {
+                    return 1; // Todos go last
+                } else if (d2 == null) {
+                    return -1;
+                } else {
+                    return d1.compareTo(d2);
+                }
+            }
+        });
+    }
     @Override
     public String toString() {
         if (tasks.isEmpty()) {
@@ -108,9 +135,9 @@ public class TaskList {
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i+1)
-              .append(".")
-              .append(tasks.get(i));
+            sb.append(i + 1)
+                .append(".")
+                .append(tasks.get(i));
 
             if (i < tasks.size() - 1) {
                 sb.append("\n");
